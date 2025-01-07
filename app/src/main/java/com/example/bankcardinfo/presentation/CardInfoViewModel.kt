@@ -25,7 +25,10 @@ class CardInfoViewModel(private val interactor: CardInfoInteractor) : ViewModel(
             interactor.getCardInfo(input).collect { pair ->
                 withContext(Dispatchers.Main) {
                     when {
-                        pair.first != null -> _binInfo.postValue(pair.first)
+                        pair.first != null -> {
+                            _binInfo.postValue(pair.first)
+                            _error.postValue(null)
+                        }
                         pair.second != null -> _error.postValue(pair.second)
                     }
                 }
