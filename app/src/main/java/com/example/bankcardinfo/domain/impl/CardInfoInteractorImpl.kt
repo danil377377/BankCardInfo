@@ -4,6 +4,7 @@ import com.example.bankcardinfo.domain.api.CardInfoInteractor
 import com.example.bankcardinfo.domain.api.CardInfoRepository
 import com.example.bankcardinfo.domain.model.CardInfo
 import com.example.bankcardinfo.utility.Resource
+import com.example.bankcardinfo.utility.log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

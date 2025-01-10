@@ -17,7 +17,9 @@ class RetrofitNetworkClient(private val context: Context, val binlistService: Bi
         return withContext(Dispatchers.IO) {
             try {
                 val response = binlistService.getBinInfo(bin)
-                response.apply { resultCode = 200 }
+                if(response.scheme.isNullOrEmpty()){
+                    Response().apply { resultCode = 0 }
+                }else response.apply { resultCode = 200 }
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }
             } catch (exeption: SocketTimeoutException) {

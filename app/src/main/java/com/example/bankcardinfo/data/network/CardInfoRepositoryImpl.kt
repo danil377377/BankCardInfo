@@ -13,18 +13,21 @@ class CardInfoRepositoryImpl(private val networkClient: NetworkClient) : CardInf
             -1 -> {
                 emit(Resource.Error("Проверьте подключение к интернету"))
             }
+
             600 -> {
                 emit(Resource.Error("Сервер не отвечает. Проверьте подключение к интернету"))
             }
 
-            200 -> emit(Resource.Success(convertToCardInfo(response as BinlistResponse)))
+            0 -> emit(Resource.Error("По данному BIN нет данных"))
+            200 -> emit(Resource.Success(convertToCardInfo(response as BinlistResponse, bin)))
             else -> {
                 emit(Resource.Error("Ошибка сервера.\nВероятно было совершено слишком много запросов.\nПожалуйста, повторите запрос позже"))
             }
         }
     }
 
-    private fun convertToCardInfo(response: BinlistResponse): CardInfo = CardInfo(
+    private fun convertToCardInfo(response: BinlistResponse, bin: String): CardInfo = CardInfo(
+        bin = bin.toInt(),
         response.number,
         response.scheme,
         response.type,

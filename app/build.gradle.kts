@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id ("kotlin-kapt")
 }
 
 android {
@@ -38,7 +39,7 @@ android {
         compose = true
     }
 }
-
+val room_version = "2.6.1"
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -65,4 +66,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation ("io.insert-koin:koin-android:3.3.0")
     implementation("io.insert-koin:koin-androidx-compose:3.4.0")
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 }

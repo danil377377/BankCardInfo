@@ -35,7 +35,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization.Companion as Keyboa
 @Composable
 fun CardInfoScreen() {
     val viewModel: CardInfoViewModel = koinViewModel()
-    val binInput = remember { mutableStateOf("") }
+    val binInput = viewModel.binInput.observeAsState().value?:""
     val binInfo = viewModel.binInfo.observeAsState().value
     val isLoading = viewModel.isLoading.observeAsState().value ?: false
     val error = viewModel.error.observeAsState().value
@@ -48,8 +48,8 @@ fun CardInfoScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = binInput.value,
-            onValueChange = { binInput.value = it },
+            value = binInput,
+            onValueChange = { viewModel.onInputChange(it) },
             label = { Text("Enter BIN") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
@@ -58,10 +58,10 @@ fun CardInfoScreen() {
                 imeAction = ImeAction.Next,
             ),
             keyboardActions = KeyboardActions(onNext = { keyboardController?.hide()
-            if(binInput.value.length==6)viewModel.getCardInfo(binInput.value)})
+            if(binInput.length==6)viewModel.getCardInfo(binInput)})
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { viewModel.getCardInfo(binInput.value) }, enabled = binInput.value.length==6) {
+        Button(onClick = { viewModel.getCardInfo(binInput) }, enabled = binInput.length==6) {
             Text("Get Card Info")
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -71,7 +71,7 @@ fun CardInfoScreen() {
         }
 
         if(!error.isNullOrEmpty()) {
-            error?.let { errorMessage ->
+            error.let { errorMessage ->
                 Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
             }
         }else {

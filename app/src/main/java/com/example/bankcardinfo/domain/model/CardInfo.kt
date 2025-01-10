@@ -6,6 +6,7 @@ import com.example.bankcardinfo.utility.Country
 import com.example.bankcardinfo.utility.Number
 
 data class CardInfo(
+    val bin: Int? = 0,
     val number: Number?,
     val scheme: String?,
     val type: String?,
