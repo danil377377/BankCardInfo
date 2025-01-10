@@ -33,7 +33,7 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.compose.ui.text.input.KeyboardCapitalization.Companion as KeyboardCapitalization1
 
 @Composable
-fun CardInfoScreen() {
+fun CardInfoScreen(onHistoryClick:()->Unit ) {
     val viewModel: CardInfoViewModel = koinViewModel()
     val binInput = viewModel.binInput.observeAsState().value?:""
     val binInfo = viewModel.binInfo.observeAsState().value
@@ -78,6 +78,9 @@ fun CardInfoScreen() {
             binInfo?.let { cardInfo ->
                 CardInfoItem(cardInfo)
             }
+        }
+        Button(onClick = { onHistoryClick() }) {
+            Text("History")
         }
     }
 }

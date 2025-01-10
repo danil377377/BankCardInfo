@@ -15,7 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.bankcardinfo.ui.CardInfoScreen
+import com.example.bankcardinfo.ui.HistoryScreen
 import com.example.bankcardinfo.ui.theme.BankCardInfoTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,14 +27,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             BankCardInfoTheme {
                 Column(
                     Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                         .padding(top = 16.dp)
-                ){
-                CardInfoScreen()}
+                ) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "home"
+                    ) {
+                        composable(route = "home") {
+                            CardInfoScreen({ navController.navigate("history") })
+                        }
+                        composable(route = "history") {
+                            HistoryScreen()
+                        }
+                    }
+                }
             }
         }
     }
