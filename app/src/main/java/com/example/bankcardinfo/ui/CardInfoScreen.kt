@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,10 +36,10 @@ import androidx.compose.ui.text.input.KeyboardCapitalization.Companion as Keyboa
 @Composable
 fun CardInfoScreen(onHistoryClick:()->Unit ) {
     val viewModel: CardInfoViewModel = koinViewModel()
-    val binInput = viewModel.binInput.observeAsState().value?:""
-    val binInfo = viewModel.binInfo.observeAsState().value
-    val isLoading = viewModel.isLoading.observeAsState().value ?: false
-    val error = viewModel.error.observeAsState().value
+    val binInput = viewModel.binInput.collectAsState().value
+    val binInfo = viewModel.binInfo.collectAsState().value
+    val isLoading = viewModel.isLoading.collectAsState().value
+    val error = viewModel.error.collectAsState().value
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -61,7 +62,7 @@ fun CardInfoScreen(onHistoryClick:()->Unit ) {
             if(binInput.length==6)viewModel.getCardInfo(binInput)})
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { viewModel.getCardInfo(binInput) }, enabled = binInput.length==6) {
+        Button(onClick = { viewModel.getCardInfo(binInput) }, enabled = binInput.length>=6 && binInput.length<=8) {
             Text("Get Card Info")
         }
         Spacer(modifier = Modifier.height(20.dp))
